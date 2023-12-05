@@ -1,6 +1,7 @@
 package online.interviewpep.Interview.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
@@ -17,7 +18,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+//@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class JobListing {
 
     @Id
@@ -36,7 +37,7 @@ public class JobListing {
     private int averageCompensation;
     @ManyToOne
     @JoinColumn(name = "poster_id")
-    //@JsonBackReference
+    @JsonBackReference
     private User poster;
     @ManyToMany(mappedBy = "appliedJobListings")
     @JsonIgnore

@@ -8,6 +8,7 @@ import online.interviewpep.Interview.dto.AddJobListingDto;
 import online.interviewpep.Interview.dto.JobListingDto;
 import online.interviewpep.Interview.entity.JobListing;
 import online.interviewpep.Interview.entity.User;
+import online.interviewpep.Interview.model.JobListingModel;
 import online.interviewpep.Interview.repository.JobListingRepository;
 import online.interviewpep.Interview.repository.UserRepository;
 import online.interviewpep.Interview.utility.APIResponse;
@@ -34,38 +35,12 @@ public class JobListingServiceImpl implements JobListingService{
     public ResponseEntity<Map<String, Object>> fetchAllJobListings() {
 
         try{
-            List<JobListing> jobListings = jobListingRepository.findAll();
+            List<JobListing> jobListings = jobListingRepository.findAllJobListings();
 
             if(jobListings.isEmpty()){
                 return APIResponse.genericResponse("success", 11, jobListings,HttpStatus.OK);
             }
 
-//            //For active postings
-//            if(active.equalsIgnoreCase("true")){
-//                List<Object> activeListings = jobListings
-//                        .stream()
-//                        .filter(l -> l.getDeadline().isAfter(LocalDateTime.now()))
-//                        .collect(Collectors.toList());
-//                Map<String, Object> listing = new HashMap<>();
-//                listing.put("listing", activeListings);
-//
-//                return genericResponse("success", 11, listing,HttpStatus.OK);
-//            }
-//
-//            //For inactive postings
-//            if(active.equalsIgnoreCase("false")){
-//                List<Object> inActiveListings = jobListings
-//                        .stream()
-//                        .filter(l -> l.getDeadline().isBefore(LocalDateTime.now()))
-//                        .collect(Collectors.toList());
-//
-//                Map<String, Object> listing = new HashMap<>();
-//                listing.put("listing", inActiveListings);
-//
-//                return genericResponse("success", 11, listing,HttpStatus.OK);
-//            }
-
-            //For all postings
 
             Map<String, Object> listing = new HashMap<>();
             listing.put("count", jobListings.size());
@@ -322,9 +297,9 @@ public class JobListingServiceImpl implements JobListingService{
 
             //For active postings
             if(active.equalsIgnoreCase("true")){
-                List<Object> activeListings = jobListings
+                List<JobListing> activeListings = jobListings
                         .stream()
-                        .filter(l -> l.getDeadline().isAfter(LocalDateTime.now()))
+                        .filter(l -> (LocalDateTime.now().isBefore(l.getDeadline())))
                         .collect(Collectors.toList());
                 Map<String, Object> listing = new HashMap<>();
                 listing.put("listing", activeListings);
@@ -337,7 +312,7 @@ public class JobListingServiceImpl implements JobListingService{
             if(active.equalsIgnoreCase("false")){
                 List<Object> inActiveListings = jobListings
                         .stream()
-                        .filter(l -> l.getDeadline().isBefore(LocalDateTime.now()))
+                        .filter(l -> LocalDateTime.now().isAfter(l.getDeadline()))
                         .collect(Collectors.toList());
 
                 Map<String, Object> listing = new HashMap<>();
