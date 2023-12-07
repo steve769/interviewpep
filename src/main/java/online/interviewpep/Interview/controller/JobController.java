@@ -15,6 +15,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api/v1/listings")
 @RequiredArgsConstructor
+@CrossOrigin
 public class JobController {
     public final JobListingService jobListingService;
     @GetMapping("/getAllListings")
